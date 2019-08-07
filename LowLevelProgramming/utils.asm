@@ -1,3 +1,5 @@
+        ;; nasm -felf64 utils.asm -o utils.o
+
         ;; Your functions accept arguments in rdi, rsi, rdx, rcx, r8, and r9
 
         section .data
@@ -259,7 +261,7 @@ string_copy:
         mov rax, 0
         ret
 
-        global parse_int
+        global parse_uint
 parse_uint:
         xor rbx, rbx
         xor rcx, rcx
@@ -288,6 +290,7 @@ parse_uint:
         mov rdx, rcx
         ret
 
+        global parse_int
 parse_int:
         xor rbx, rbx
         xor rcx, rcx
@@ -329,70 +332,3 @@ parse_int:
         mov rax, r9
         mov rdx, rcx
         ret
-
-        ;; nasm -felf64 utils.asm -o utils.o && ld -o utils utils.o && ./utils
-        section .data
-test_string:    db "abcdefqwe", 0
-test_string2:    db "abcdef", 0
-test_buf:       times 100 db 0
-test_number:    db "123560", 0
-test_neg_number:    db "-123456", 0
-
-        section .text
-        global _start
-_start:
-        mov rsi, test_string
-        call print_string
-        call print_newline
-
-        mov rsi, 67890
-        call print_uint
-        call print_newline
-
-        mov rsi, 0
-        call print_uint
-        call print_newline
-
-        mov rsi, -67890
-        call print_int
-        call print_newline
-
-        mov rsi, 0
-        call print_int
-        call print_newline
-
-        mov rsi, test_string
-        call string_length
-        mov rsi, rax
-        call print_uint
-        call print_newline
-
-        mov rbx, test_string
-        mov rdx, test_string2
-        call string_equals
-        mov rsi, rax
-        call print_uint
-        call print_newline
-
-        mov rbx, test_string
-        mov rdx, test_buf
-        mov rcx, 100
-        call string_copy
-        mov rsi, rax
-        call print_string
-        call print_newline
-
-        mov rsi, test_number
-        call parse_uint
-        mov rsi, rax
-        call print_uint
-        call print_newline
-
-        mov rsi, test_neg_number
-        call parse_int
-        mov rsi, rax
-        call print_int
-        call print_newline
-
-        mov rsi, rax
-        call exit
