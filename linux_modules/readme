@@ -1,0 +1,1 @@
+sudo mknod /dev/device_file c 900 1
